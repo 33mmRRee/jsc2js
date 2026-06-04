@@ -163,7 +163,7 @@ def main():
                 continue
 
             # v8gen config
-            gn_args = "v8_enable_disassembler=true v8_enable_object_print=true is_component_build=false is_debug=false"
+            gn_args = "v8_enable_disassembler=true v8_enable_object_print=true is_component_build=false is_debug=false v8_enable_pointer_compression=true v8_enable_sandbox=true"
             run(f"python tools/dev/v8gen.py x64.release -vv -- {gn_args}", cwd="v8", check=True)
 
             # Build
