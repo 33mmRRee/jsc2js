@@ -13,7 +13,7 @@ index 715ee06c0d0..34562f5cfcb 100644
 +#include <iostream>
 +
 +static void Disassemble(v8::internal::Isolate* isolate, 
-+                        v8::internal::Tagged<v8::internal::BytecodeArray> bytecode, 
++                        v8::internal::BytecodeArray bytecode, 
 +                        std::unordered_set<uintptr_t>& visited,
 +                        int depth) {
 +  if (depth > 100) { 
@@ -36,30 +36,30 @@ index 715ee06c0d0..34562f5cfcb 100644
 +  //v8::internal::OFStream os(stdout);
 +  //bytecode->Disassemble(os);
 +
-+  auto consts = bytecode->constant_pool();
++  auto consts = bytecode.constant_pool();
 +  
 +  //for (int i = 0; i < depth; ++i) v8::internal::PrintF("  ");
-+  //v8::internal::PrintF("Constant pool size: %d\n", consts->length());
++  //v8::internal::PrintF("Constant pool size: %d\n", consts.length());
 +  //fflush(stdout);
 +
-+  for (int i = 0; i < consts->length(); i++) {
-+    auto obj = consts->get(i);
-+    if (v8::internal::IsSharedFunctionInfo(obj)) {
++  for (int i = 0; i < consts.length(); i++) {
++    auto obj = consts.get(i);
++    if (obj.IsSharedFunctionInfo()) {
 +      auto shared = v8::internal::SharedFunctionInfo::cast(obj);
 +      
 +      //for (int i = 0; i < depth; ++i) v8::internal::PrintF("  ");
 +      //v8::internal::PrintF("--> Found SFI in constant pool at index %d: ", i);
 +      
-+      auto function_name = shared->Name();
-+      if (function_name->length() > 0) {
++      auto function_name = shared.Name();
++      if (function_name.length() > 0) {
 +          //v8::internal::PrintF("%s\n", function_name->ToCString().get());
 +      } else {
 +          //v8::internal::PrintF("(anonymous)\n");
 +      }
 +      //fflush(stdout);
 +      
-+      if (shared->HasBytecodeArray()) {
-+          Disassemble(isolate, shared->GetBytecodeArray(isolate), visited, depth + 1);
++      if (shared.HasBytecodeArray()) {
++          Disassemble(isolate, shared.GetBytecodeArray(isolate), visited, depth + 1);
 +      } else {
 +          //for (int i = 0; i < depth; ++i) v8::internal::PrintF("  ");
 +          //v8::internal::PrintF("    (SFI has no bytecode array, skipping)\n");
